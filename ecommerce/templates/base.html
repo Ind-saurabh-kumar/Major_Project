@@ -35,13 +35,15 @@
 
 <body>
 
+
+
   <!-- ======= Header ======= -->
   <header id="header" class="fixed-top ">
     <div class="container d-flex align-items-center justify-content-between">
 
-      <h1 class="logo"><a href="/">E-Kart</a></h1>
+      
       <!-- Uncomment below if you prefer to use an image logo -->
-      <!-- <a href="index.html" class="logo"><img src="static/assets/img/logo.png" alt="" class="img-fluid"></a>-->
+      <div><a href="/" class="logo"><img src="{% static 'images/logo.png' %}" alt="" class="img-fluid">E-Kart</a></div>
 
       <nav id="navbar" class="navbar">
         <ul>
@@ -72,7 +74,8 @@
   <section id="hero">
     <div class="hero-container">
       {% block content %}
-      
+
+    
       
       {% endblock content %}
     </div>
