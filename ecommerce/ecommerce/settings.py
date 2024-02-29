@@ -42,7 +42,7 @@ INSTALLED_APPS = [
 
 EXTERNAL_APPS=[
     'ecommerceapp',
-    'auth'
+    'authcart'
 ]
 
 
