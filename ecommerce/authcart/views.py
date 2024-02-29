@@ -26,11 +26,11 @@ def signup(request):
         return HttpResponse("User created", email)
 
     
-    return render(request,"auth/signup.html")
+    return render(request,"signup.html")
 
 
 def handlelogin(request):
-    return render(request, "auth/login.html")
+    return render(request, "login.html")
 
 def handlelogout(request):
-    return redirect('auth/login')
+    return redirect('login.html')
