@@ -9,7 +9,5 @@ class Contact(models.Model):
     phonenumber=models.IntegerField(max_length=10)
 
 
-
-    def __str__(self)
     
 
