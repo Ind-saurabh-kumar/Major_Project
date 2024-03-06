@@ -1,3 +1,4 @@
+from telnetlib import LOGOUT
 from django.shortcuts import render, redirect, HttpResponse
 
 from django.contrib.auth.models import User
@@ -9,16 +10,16 @@ from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_decode, urlsafe_base64_encode
 
 from .utils import TokenGenerator, generate_token
-from django.utils.encoding import force_bytes 
-
 
 from django.core.mail import EmailMessage
 
 from django.conf import settings
 
-from django.utils.encoding import force_bytes, force_bytes, DjangoUnicodeDecodeError
+from django.utils.encoding import force_bytes, force_str, DjangoUnicodeDecodeError
 from django.views.generic import View
-from django.utils.encoding import force_str
+
+from django.contrib.auth import authenticate, login, logout
+
 
 
 # Create your views here.
@@ -43,22 +44,22 @@ def signup(request):
             pass
         
         user = User.objects.create_user(email, email, password)
-        user.is_active = False
+        user.is_active = True
         user.save()
 
-        email_subject = 'Activate Your Account'
-        message=render_to_string('activate.html',{
-            'user':user,
-            'domain':'127.0.0.1:8000',
-            'uid':urlsafe_base64_encode(force_bytes(user.pk)),
-            'token':generate_token.make_token(user)
-        })
+        # email_subject = 'Activate Your Account'
+        # message=render_to_string('activate.html',{
+        #     'user':user,
+        #     'domain':'127.0.0.1:8000',
+        #     'uid':urlsafe_base64_encode(force_bytes(user.pk)),
+        #     'token':generate_token.make_token(user)
+        # })
 
-        email_message = EmailMessage(email_subject, message, settings.EMAIL_HOST_USER, [email])
-        email_message.send()
-        messages.success(request,'Activate Your Account By clicking the link sent to your email')
+        # email_message = EmailMessage(email_subject, message, settings.EMAIL_HOST_USER, [email])
+        # email_message.send()
+        # messages.success(request,'Activate Your Account By clicking the link sent to your email')
 
-        return redirect('auth/login.html')
+        # return redirect('/auth/login/')
         
 
         messages.success(request, "Account Created Successfully")
@@ -80,11 +81,27 @@ class ActivateAccountView(View):
             user.is_active=True
             user.save()
             messages.info(request,"Account Activated Successfully")
-            return redirect('/auth/login')
-        return render(request, 'activatefail.html')
+            return redirect('login/')
+        # return render(request, 'activatefail.html')
 
 def handlelogin(request):
-    return render(request, "login.html")
+    if request.method=="POST":
+        username=request.POST['email']
+        userpassword=request.POST['pass1']
+        myuser=authenticate(username=username, password=userpassword)
+
+        if myuser is not None:
+            login(request, myuser)
+            messages.success(request, "Successfully Logged In")
+            return redirect('/')
+        
+        else:
+            messages.error(request, "Invalid Credentials")
+            return redirect('login.html')
+        
+    return render(request, 'login.html')
 
 def handlelogout(request):
-    return redirect('login.html')
+    logout(request)
+    messages.info(request, "Successfully Logged Out")
+    return redirect('/auth/login')

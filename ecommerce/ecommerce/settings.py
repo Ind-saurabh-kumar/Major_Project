@@ -125,14 +125,21 @@ USE_TZ = True
 
 # Sending emails
 
-EMAIL_HOST = 'smtpout.secureserver.net'
+EMAIL_HOST = 'localhost'
 EMAIL_HOST_USER = 'ftd10622564@desu.ac.in'
 EMAIL_HOST_PASSWORD = 'SHUBH@DSEU8936'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+import os
+from django.core.mail import EmailMessage
 
 
+
+
+
+# Optionally, you can set the default email address for sending emails
+DEFAULT_FROM_EMAIL = 'ftd10622564@desu.ac.in'
 
 
 
