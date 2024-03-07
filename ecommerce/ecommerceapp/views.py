@@ -1,10 +1,20 @@
 from django.shortcuts import render
-from ecommerceapp.models import Contact, Product
+from ecommerceapp.models import Contact, Product, Orders, OrderUpdate
 from math import ceil
 from django.contrib.auth.models import User 
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect, render
 from django.contrib import messages
+
+from ecommerceapp import keys 
+from django.conf import Settings
+
+MERCHANT_KEY = keys.MK 
+import json 
+from django.views.decorators.csrf import csrf_exempt
+
+from PayTm import Checksum
+
 # Create your views here.
 
 def index(request):
@@ -54,7 +64,7 @@ def checkout(request):
         return redirect('/auth/login')
     
     if request.method =="POST":
-        item_json = request.POST.get('itemsJson', '')
+        items_json = request.POST.get('itemsJson', '')
         name = request.POST.get('name', '')
         amount = request.POST.get('amount', '')
         email = request.POST.get('email', '')
@@ -71,15 +81,11 @@ def checkout(request):
         update.save()
         thank = True
 
-    
-
-
-
 
 # # PAYMENT INTEGRATION
 
         id = Order.order_id
-        oid=str(id)+"ShopyCart"
+        oid=str(id)+"EKart"
         param_dict = {
 
             'MID':keys.MID,
